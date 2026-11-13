@@ -1,0 +1,23 @@
+--- prev_index.html	2026-11-12 19:54:52.877874257 -0500
++++ nuevo/index.html	2026-11-12 19:54:52.900810904 -0500
+@@ -127,7 +127,7 @@
+ S.closes.unshift({id:uid(),f:new Date().toISOString(),vd:me.u,per:fd||fm,tot:sm(),pdf:mkpdf(L)});save();toast('Caja cerrada y guardada como PDF')}
+ function pdfGo(id,d){const c=S.closes.find(x=>x.id==id),b=atob(c.pdf),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);const url=URL.createObjectURL(new Blob([u],{type:'application/pdf'}));if(d
+ V.cr=()=>{$('#pv').innerHTML=S.closes.filter(c=>A_()||c.vd==me.u).map(c=>`<div class="bx"><div class="rw"><b>${c.per} · ${esc(c.vd)}</b><b>${M(c.tot)}</b></div><small>${new Date(c.f).toLocaleString()}</small><div class
+-V.gs=()=>{$('#pv').innerHTML=`<div class="bx"><h3>Gasto externo (bolsas, vasos...)</h3><input id="g1" placeholder="Concepto"><input id="g2" type="number" step="0.01" placeholder="Monto"><select id="g3"><option value="">
++V.gs=()=>{$('#pv').innerHTML=`<div class="bx"><h3>Gasto externo (bolsas, vasos...)</h3><input id="g1" placeholder="Concepto"><input id="g2" type="number" step="0.01" placeholder="Monto"><select id="g3"><option value="">
+ function gad(){const c=$('#g1').value.trim(),m=+$('#g2').value;if(!c||!m)return toast('Escribe concepto y monto');if(!$('#g3').value)return toast('Elige si el dinero es de la tienda o de inversión');S.exp.unshift({id:u
+ function csv(){const r=[['Fecha','Vendedor','Cliente','Pago','Detalle','Total'].concat(A_()?['Costo','Ganancia']:[])].concat(sl().map(s=>[s.f.slice(0,16).replace('T',' '),s.vd,s.cl||'',s.py,s.it.map(i=>i.q+'x '+i.n).joi
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+r.map(x=>x.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n')],{type:'text/csv'}));a.download='ventas.csv';a.click()}
+@@ -139,6 +139,11 @@
+ $('#pv').innerHTML=`<input type="month" value="${dm}" onchange="dm=this.value;V.db()"><div class="kp">${K('Ingresos',M(t))}${K('Costo de lo vendido',M(c))}${K('Gastos externos',M(ex))}${K(g>=0?'Ganas':'Pierdes',M(g),g>=
+ V.cf=()=>{const c=S.cfg;$('#pv').innerHTML=`<div class="bx"><h3>Tienda</h3><input id="a1" placeholder="Nombre de la tienda" value="${esc(c.name)}"><input id="a2" placeholder="Frase" value="${esc(c.slogan)}"><input id="a
+ function fmod(){const set=$('#fm2').value=='set',p=S.prods.find(x=>x.n.toLowerCase()==$('#fn').value.trim().toLowerCase());$('#fs').placeholder=set?'Stock correcto (cantidad exacta)':'Cantidad que ingresa (se suma al st
++function gedt(k,id){const g=k=='Gasto',e=g?S.exp.find(x=>x.id==id):S.buys.find(x=>x.id==id);if(!e)return;
++modal(`<h2>Editar ${g?'gasto':'compra'}</h2>${g?`<input id="e1" placeholder="Concepto" value="${esc(e.c)}"><input id="e2" type="number" step="0.01" placeholder="Monto" value="${e.m}">`:`<p>${e.q} × ${esc(e.n)}</p><inpu
++function gsv(k,id){const g=k=='Gasto',e=g?S.exp.find(x=>x.id==id):S.buys.find(x=>x.id==id),m=+$('#e2').value,s=$('#e3').value;if(!e)return;
++if(g&&!$('#e1').value.trim())return toast('Escribe el concepto');if(!(m>0))return toast(g?'Escribe el monto':'Escribe el costo unitario');if(!s)return toast('Elige si el dinero es de la tienda o de inversión');
++if(g){e.c=$('#e1').value.trim();e.m=m}else{e.pc=m;e.tot=m*e.q}e.src=s;save();close_();V.gs();toast('Cambios guardados')}
+ function gdel(k,id){if(!confirm(k=='Gasto'?'¿Eliminar este gasto?':'¿Eliminar este registro de compra? El stock del producto no cambia (corrígelo en Productos si hace falta).'))return;if(k=='Gasto')S.exp=S.exp.filter
+ function fabM(){modal(`<h2>Restaurar modo fábrica</h2><p>Se borrará <b>todo</b>: productos, ventas, pedidos, compras, gastos, promociones, banners, usuarios y ajustes${URL_SHEETS?', también en Google Sheets':''}. No 
+ async function fabGo(){const pw=$('#fpw').value;if(!A_()||pw!==me.p)return toast('Clave de administrador incorrecta');clearTimeout(st);
